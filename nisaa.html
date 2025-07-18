@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"> 
+  <title>Liff</title>
+  <style>
+    body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: radial-gradient(ellipse at bottom, #1b2735 0%, #090a0f 100%);
+  color: #e0e0e0;
+  text-align: center;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+    
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1, p, .button {
+      animation: fadeIn 1s ease forwards;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin-top: 60px;
+      color: #ffffff;
+      position: relative;
+      z-index: 2;
+    }
+    p {
+      font-style: italic;
+      color: #cccccc;
+      position: relative;
+      z-index: 2;
+    }
+    .button {
+      background-color: #333333;
+      border: 1px solid #555;
+      color: #ffffff;
+      padding: 12px 25px;
+      margin: 10px;
+      border-radius: 25px;
+      font-size: 15px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      position: relative;
+      z-index: 2;
+    }
+    .button:hover {
+      background-color: #555;
+    }
+    .player-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+      position: relative;
+      z-index: 2;
+    }
+    audio {
+      display: none;
+    }
+    audio.active {
+      display: block;
+      width: 90%;
+      max-width: 400px;
+      margin-top: 20px;
+    }
+    .text-container {
+  position: relative;
+  margin: 50px auto 0 auto;
+  width: 90%;
+  max-width: 600px;
+  font-size: 1.2em;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  z-index: 2;
+}
+    .text {
+      opacity: 0;
+      margin-bottom: 10px;
+      display: none;
+      transition: opacity 1s ease-in-out;
+    }
+    .typing {
+      animation: typing 3s steps(10) 0s forwards;
+    }
+    @keyframes typing {
+      0% {
+        opacity: 0;
+      }
+      100% {
+        opacity: 1;
+      }
+    }
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="meteorCanvas"></canvas>
+
+  <h1>FOR YOU NISAA</h1>
+  <p>BY : ZIFERR</p>
+  <p>Click Music To Play</p>  
+  <div>
+    <button class="button" onclick="playSong('song1')">about you</button>
+    <button class="button" onclick="playSong('song2')">blue yung-kai </button>
+    <button class="button" onclick="playSong('song3')">party anthem</button>
+    <button class="button" onclick="playSong('song4')">sombody's pleasure</button>
+    <button class="button" onclick="playSong('song5')">sempurna</button>
+    <button class="button" onclick="playSong('song6')">bukti</button>
+  </div>  
+  
+<!-- Music Controls -->
+<div style="margin-top: 20px; display: flex; flex-direction: column; align-items: center; gap: 10px;">
+  <button onclick="stopSong()" style="
+    background-color: #008CBA;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  " 
+  onmouseover="this.style.backgroundColor='#005f73'" 
+  onmouseout="this.style.backgroundColor='#008CBA'" 
+  onmousedown="this.style.transform='scale(0.98)'" 
+  onmouseup="this.style.transform='scale(1)'">
+    Stop Music
+  </button>
+
+  <div>
+    <label for="volume" style="color: #ccc;">Volume</label><br>
+    <input type="range" id="volume" min="0" max="1" step="0.01" value="1" style="width: 200px;">
+  </div>
+</div> 
+
+  <div class="player-container">
+    <audio id="song1" src="https://files.catbox.moe/nw0w73.mp3" class="hide-controls"></audio>
+    <audio id="song2" src="https://files.catbox.moe/589zx1.mp3" class="hide-controls"></audio>
+    <audio id="song3" src="https://files.catbox.moe/zcuwi2.mp3" class="hide-controls"></audio>
+    <audio id="song4" src="https://files.catbox.moe/5kcxl8.mp3" class="hide-controls"></audio>
+    <audio id="song5" src="https://files.catbox.moe/289cp4.mp3" class="hide-controls"></audio>
+    <audio id="song6" src="https://files.catbox.moe/xs1ghw.mp3" class="hide-controls"></audio>
+  </div>
+
+  <!-- Text Container -->  
+  <div class="text-container" id="textContainer">
+    <div class="text" id="text1">happy anniversary araa hhe</div>
+    <div class="text" id="text2">maaf yaa belum bisa jadi yang terbaik buat kamu</div>
+    <div class="text" id="text3">terimakasih juga sudah bersamaku sejauh ini</div>
+    <div class="text" id="text4">jangan pernah ninggalin aku yaa sayangg</div>
+    <div class="text" id="text5">akuu sayanggg bangett samaa kamuu hhii</div>
+    <div class="text" id="text6">sehat sehat disana yaa bocill</div>
+    <div class="text" id="text7">i love you sayanggg happy anniversary</div>
+  </div>
+  
+  
+
+  <script>
+  let currentAudio = null;
+  
+  const volumeSlider = document.getElementById('volume');
+  volumeSlider.addEventListener('input', function () {
+    const audios = document.querySelectorAll('audio');
+    audios.forEach(audio => {
+      audio.volume = volumeSlider.value;
+    });
+  });
+
+  function playSong(id) {
+    const audios = document.querySelectorAll('audio');
+    audios.forEach(audio => {
+      audio.pause();
+      audio.currentTime = 0;
+    });
+    const selectedAudio = document.getElementById(id);
+    selectedAudio.play();
+    currentAudio = selectedAudio;
+    
+    const texts = document.querySelectorAll('.text');
+    texts.forEach(text => {
+      text.style.display = 'none';
+      text.style.opacity = '0';
+      text.classList.remove('typing');
+    });
+
+    selectedAudio.onerror = function () {
+      alert('Audio tidak bisa diputar. Pastikan file mp3-nya ada.');
+    };
+
+    // Show text after 15 seconds and remove old text before showing new one
+    setTimeout(function() {
+      const texts = document.querySelectorAll('.text');
+      let i = 0;
+      function displayText() {
+        if (i < texts.length) {
+          // Fade out the old text before displaying new one
+          const currentText = document.querySelector('.text:not([style*="display: none"])');
+          if (currentText) {
+            currentText.style.opacity = '0'; // Fade out old text
+            setTimeout(() => {
+              currentText.style.display = 'none'; // Hide the old text after fading out
+            }, 1000);
+          }
+          // Show new text
+          texts[i].style.display = 'block';
+          texts[i].classList.add('typing');
+          setTimeout(() => {
+            texts[i].style.opacity = '0'; // Fade out text after it appears
+          }, 5000); // Fade out after 5 seconds
+          i++;
+          setTimeout(displayText, 5000); // Delay next text by 5 seconds
+        }
+      }
+      displayText();
+    }, 15000); // Delay before showing text starts
+  }
+
+  function stopSong() {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio.currentTime = 0;
+    }
+  }
+
+    
+
+    const canvas = document.getElementById('meteorCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    const stars = [];
+    for (let i = 0; i < 150; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        radius: Math.random() * 1.2,
+        alpha: Math.random()
+      });
+    }
+
+    const meteors = [];
+    function createMeteor() {
+      const length = Math.random() * 100 + 60;
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * -canvas.height,
+        length,
+        speed: Math.random() * 0.8 + 0.2,
+        angle: Math.PI / 4,
+        opacity: Math.random() * 0.5 + 0.3
+      };
+    }
+
+    for (let i = 0; i < 30; i++) {
+      meteors.push(createMeteor());
+    }
+
+    function drawStar(star) {
+      ctx.beginPath();
+      ctx.arc(star.x, star.y, star.radius, 0, 2 * Math.PI);
+      ctx.fillStyle = `rgba(255, 255, 255, ${star.alpha})`;
+      ctx.fill();
+    }
+
+    function drawMeteor(meteor) {
+      const xEnd = meteor.x + Math.cos(meteor.angle) * meteor.length;
+      const yEnd = meteor.y + Math.sin(meteor.angle) * meteor.length;
+
+      ctx.beginPath();
+      ctx.moveTo(meteor.x, meteor.y);
+      ctx.lineTo(xEnd, yEnd);
+      ctx.strokeStyle = `rgba(255, 255, 255, ${meteor.opacity})`;
+      ctx.lineWidth = 2;
+      ctx.stroke();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      stars.forEach(star => drawStar(star));
+      meteors.forEach(meteor => drawMeteor(meteor));
+
+      meteors.forEach(meteor => {
+        meteor.y += meteor.speed;
+        if (meteor.y > canvas.height) {
+          meteor.y = -60;
+        }
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+</html>
